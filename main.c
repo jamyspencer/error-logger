@@ -28,5 +28,8 @@ int main ( int argc, char *argv[] ){
                 }
         }
 
+	addmsg("bob");
+	addmsg("jim");
+
 	return 0;
 }
