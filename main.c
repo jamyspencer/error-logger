@@ -5,7 +5,7 @@
 int main ( int argc, char *argv[] ){
 
 	char* log_file_name = "logfile.txt";
-	int special_number = 37;
+	char* spec_num = "37";
 	int c;
 
 	//check that there is the correct number of command line arguments
@@ -23,13 +23,13 @@ int main ( int argc, char *argv[] ){
 			log_file_name = argv[2];
 			break;
 		case 'n':
-                        special_number = atoi(argv[2]);
+			spec_num = argv[2];
 			break;
                 }
         }
 
-	addmsg("bob");
-	addmsg("jim");
+	makeentry("bob is gay");
+	savelog(log_file_name, argv[0], spec_num);
 
 	return 0;
 }

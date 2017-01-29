@@ -1,3 +1,5 @@
+
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -11,19 +13,34 @@ typedef struct list_struct {
 static log_t* headptr = NULL;
 static log_t* tailptr = NULL;
 
-int addmsg(char* msg){
+data_t makeentry(char* msg){
+	data_t temp;
+	temp.err_msg = msg;
+	clock_gettime(CLOCK_REALTIME, &(temp.time));
+	addmsg(temp);
+}
+
+int addmsg(data_t data) { /* allocate node for data and add to end of list */
+	log_t *newnode;
+	int nodesize;
+	nodesize = sizeof(log_t) + strlen(data.err_msg) + 1;
+
+	if ((newnode = (log_t *)(malloc(nodesize))) == NULL){ /* couldn't add node */
+		return -1;
+	}
+	newnode->item.time = data.time;
+	newnode->item.err_msg = (char *)newnode + sizeof(log_t);
+	strcpy(newnode->item.err_msg, data.err_msg);
+	newnode->next = NULL;
+	
 	if (headptr == NULL){
-		headptr = malloc(sizeof (log_t));
-//		clock_gettime(CLOCK_MONOTONIC, &((headptr->item).time));
-		strcpy((headptr->item).string, msg);
-		tailptr = headptr;
+		headptr = newnode;
 	}
 	else{
-		tailptr->next = malloc(sizeof (log_t));
-		tailptr = tailptr->next;
-//		clock_gettime(CLOCK_MONOTONIC, &((tailptr->item).time));
-		strcpy((tailptr->item).string, msg);
+		tailptr->next = newnode;
 	}
+
+	tailptr = newnode;
 	return 0;
 }
 
@@ -40,6 +57,24 @@ char *getlog(void) {
 	return NULL;
 }
 
-int savelog(char *filename) {
+int savelog(char* log_file_name, char* prg_name, char* spec_num) {
+	FILE* file_write = fopen(log_file_name, "a");
+	log_t* trav;
+
+	if (headptr != NULL){
+		trav = headptr;
+	}
+	else{
+		printf("Error: Nothing to write.");
+		return -1;
+	}
+	while (trav != NULL){
+		fprintf(file_write, "%s%s%lu%09lu", prg_name, ": ", trav->item.time.tv_sec, trav->item.time.tv_nsec);
+		fprintf(file_write, "%s%s%s%s\n", ": Error: nValue = ", spec_num, " - ", trav->item.err_msg);
+		trav = trav->next;
+	}
+	
+
+//	sprintf(temp.string, "%s%s%lu%09lu", filename, ": ", temp.time.tv_sec, temp.time.tv_nsec);
 	return 0;
 }
