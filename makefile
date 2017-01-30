@@ -1,7 +1,10 @@
 CC=gcc 
 
-buggycode: main.c loglib.c log.h
-	$(CC)-o buggycode main.c loglib.c
+buggycode: main.o loglib.o 
+	$(CC)-o buggycode main.o loglib.o
+
+%.o: %.c %.h
+	$(CC) -o %.c
 
 clean :
 	rm buggycode *.txt
