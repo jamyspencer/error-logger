@@ -1,3 +1,4 @@
+/* Written by Jamy Spencer 30 Jan 2017 */
 #include <stdio.h>
 #include "log.h"
 #include <unistd.h>

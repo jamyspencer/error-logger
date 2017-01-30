@@ -1,3 +1,4 @@
+/* Written by Jamy Spencer 30 Jan 2017 */
 #ifndef LOG_H
 #define LOG_H
 

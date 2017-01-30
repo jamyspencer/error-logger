@@ -1,3 +1,5 @@
+/* Written by Jamy Spencer 30 Jan 2017 */
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
