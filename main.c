@@ -28,8 +28,13 @@ int main ( int argc, char *argv[] ){
                 }
         }
 
-	makeentry("bob is gay");
-	savelog(log_file_name, argv[0], spec_num);
+	LogErrEntry("Jumping Jack Flash got stuck in the mud");
+	LogErrEntry("Error: Self Destruct Sequence Initiated");
 
+	if (SaveLog(log_file_name, argv[0], spec_num)){
+		LogErrEntry("Error Log Empty");
+	}
+	
+	clearlog();
 	return 0;
 }

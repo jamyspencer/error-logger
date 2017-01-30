@@ -1,4 +1,4 @@
-
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,11 +13,14 @@ typedef struct list_struct {
 static log_t* headptr = NULL;
 static log_t* tailptr = NULL;
 
-data_t makeentry(char* msg){
+data_t LogErrEntry(char* msg){
 	data_t temp;
+
+	perror(msg);
 	temp.err_msg = msg;
 	clock_gettime(CLOCK_REALTIME, &(temp.time));
 	addmsg(temp);
+//	printf("%s\n", temp.err_msg);
 }
 
 int addmsg(data_t data) { /* allocate node for data and add to end of list */
@@ -49,15 +52,16 @@ void clearlog(void) {
 	while(headptr != NULL){
 		temp = headptr;
 		headptr = headptr->next;
+		temp = 0;
 		free(temp);	
 	}
 }
 
-char *getlog(void) {
+char* getlog(void) {
 	return NULL;
 }
 
-int savelog(char* log_file_name, char* prg_name, char* spec_num) {
+int SaveLog(char* log_file_name, char* prg_name, char* spec_num) {
 	FILE* file_write = fopen(log_file_name, "a");
 	log_t* trav;
 
@@ -65,7 +69,7 @@ int savelog(char* log_file_name, char* prg_name, char* spec_num) {
 		trav = headptr;
 	}
 	else{
-		printf("Error: Nothing to write.");
+		errno = ENODATA;
 		return -1;
 	}
 	while (trav != NULL){
@@ -73,8 +77,6 @@ int savelog(char* log_file_name, char* prg_name, char* spec_num) {
 		fprintf(file_write, "%s%s%s%s\n", ": Error: nValue = ", spec_num, " - ", trav->item.err_msg);
 		trav = trav->next;
 	}
-	
-
-//	sprintf(temp.string, "%s%s%lu%09lu", filename, ": ", temp.time.tv_sec, temp.time.tv_nsec);
+	fclose(file_write);
 	return 0;
 }
