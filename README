@@ -1,0 +1,15 @@
+Simple error logging program - not very useful in current form.
+
+It will save two humorous errors to a linked list, then save them to a file -
+logfile.txt by default, though this can be changed with the -l flag.
+
+If somehow two errors didn't get logged, an error code (including a errno value)
+will be displayed but not logged to the file. I thought of running the savelog
+function recursively in this case but didn't want the possibility of infinite loops.
+
+---Options---
+-h Displays simple help menu
+-n Changes "nValue"
+-l Changes the file name that the error log is saved to.
+
+
