@@ -29,13 +29,14 @@ int main ( int argc, char *argv[] ){
                 }
         }
 
-	LogErrEntry("Jumping Jack Flash got stuck in the mud");
-	LogErrEntry("Error: Self Destruct Sequence Initiated");
+	LogErrEntry("Jumping Jack Flash got stuck in the mud", argv[0], spec_num);
+	LogErrEntry("Error: Self Destruct Sequence Initiated", argv[0], spec_num);
+//	getlog();
 
-	if (SaveLog(log_file_name, argv[0], spec_num)){
-		LogErrEntry("Error Log Empty");
+	if (SaveLog(log_file_name) == -1){
+		LogErrEntry("Error Log Empty", argv[0], spec_num);
 	}
 	
-	clearlog();
+//	clearlog();
 	return 0;
 }
