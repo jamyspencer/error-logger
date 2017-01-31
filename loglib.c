@@ -15,7 +15,7 @@ typedef struct list_struct {
 static log_t* headptr = NULL;
 static log_t* tailptr = NULL;
 
-void LogErrEntry(char* msg, char* prg_name, char* spec_num){
+data_t CreateErrMsg(char* msg, char* prg_name, char* spec_num){
 
 	data_t temp;
 	char buffer[200];
@@ -25,9 +25,8 @@ void LogErrEntry(char* msg, char* prg_name, char* spec_num){
 	sprintf(buffer, "%s%s%lu%09lu%s%s%s%s\n", prg_name, ": ", temp.time.tv_sec, temp.time.tv_nsec, ": Error: nValue = ", spec_num, " - ", msg);
 	temp.err_msg = (char*) malloc (strlen(buffer) + 1);
 	sprintf(temp.err_msg, "%s", buffer);
-	addmsg(temp);
 //	printf("%s\n", temp.err_msg);
-	return;
+	return temp;
 }
 
 int addmsg(data_t data) { /* allocate node for data and add to end of list */
@@ -41,6 +40,7 @@ int addmsg(data_t data) { /* allocate node for data and add to end of list */
 	newnode->item.time = data.time;
 	newnode->item.err_msg = (char *)newnode + sizeof(log_t);
 	strcpy(newnode->item.err_msg, data.err_msg);
+	free(data.err_msg);
 	newnode->next = NULL;
 	
 	if (headptr == NULL){
@@ -60,12 +60,12 @@ void clearlog(void) {
 	while(headptr != NULL){
 		temp = headptr;
 		headptr = headptr->next;
-		free(temp->item.err_msg);
 		free(temp);	
+//		printf("%d", temp == NULL);
 	}
 }
 
-char* getlog(void) {
+char* getlog(void) {//REMEMBER, the returned char* has been malloc'ed here, FREE IT!
 	char* str;
 	int size;
 
@@ -74,8 +74,6 @@ char* getlog(void) {
 	str = (char*) malloc (size);
 	strcpy(str, headptr->item.err_msg);
 	trav = headptr->next;
-//	printf("%s", str);
-//	printf("size of string: %d\n", size);
 
 	while (trav != NULL){
 		size += (strlen(trav->item.err_msg));
@@ -97,7 +95,7 @@ int SaveLog(char* log_file_name) {
 	}
 	char* str_out = getlog();
 	fprintf(file_write, "%s", str_out);
-	free(str_out);
+	free(str_out);//
 	
 	fclose(file_write);
 	return 0;

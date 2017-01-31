@@ -9,7 +9,7 @@ typedef struct data_struct {
 	char* err_msg;
 } data_t;
 
-void LogErrEntry(char* msg, char* prg_name, char* spec_num);
+data_t CreateErrMsg(char* msg, char* prg_name, char* spec_num);
 int addmsg(data_t data);
 void clearlog(void);
 char* getlog(void);
