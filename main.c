@@ -21,13 +21,16 @@ int main ( int argc, char *argv[] ){
 			return 0;
 			break;
 		case 'l':
-			log_file_name = argv[2];
+			log_file_name = optarg;
 			break;
 		case 'n':
-			spec_num = argv[2];
+			spec_num = optarg;
 			break;
-                }
-        }
+		case '?':
+			return 1;
+			break;
+		}
+	}
 
 	addmsg(CreateErrMsg("Jumping Jack Flash got stuck in the mud", argv[0], spec_num));
 	addmsg(CreateErrMsg("Error: Self Destruct Sequence Initiated", argv[0], spec_num));
